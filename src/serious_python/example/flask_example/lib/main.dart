@@ -10,7 +10,9 @@ void main() {
 }
 
 void startPython() async {
-  SeriousPython.run("app/app.zip", environmentVariables: {"a": "1", "b": "2"});
+  await SeriousPython.run("app/app.zip", environmentVariables: {"a": "1", "b": "2"});
+  SeriousPython.terminate();
+  // await SeriousPython.run("app/app.zip", environmentVariables: {"a": "1", "b": "2"});
 }
 
 class MyApp extends StatefulWidget {
@@ -102,17 +104,21 @@ class _MyAppState extends State<MyApp> {
                               });
                               http
                                   .post(
-                                      Uri.parse(
-                                          "http://127.0.0.1:55001/python"),
-                                      headers: {
-                                        'Content-Type': 'application/json'
-                                      },
-                                      body: json.encode(
-                                          {"command": _controller.text}))
-                                  .then((resp) => setState(() {
+                                    Uri.parse("http://127.0.0.1:55001/python"),
+                                    headers: {
+                                      'Content-Type': 'application/json'
+                                    },
+                                    body: json
+                                        .encode({"command": _controller.text}),
+                                  )
+                                  .then(
+                                    (resp) => setState(
+                                      () {
                                         _controller.text = "";
                                         _result = resp.body;
-                                      }));
+                                      },
+                                    ),
+                                  );
                             }
                           : null,
                       child: const Text("Run"))

@@ -60,6 +60,8 @@ class SeriousPython {
     // set current directory to app path
     Directory.current = path.dirname(appPath);
 
+    print(appPath);
+
     // run python program
     return runProgram(appPath,
         modulePaths: modulePaths,
